@@ -14,9 +14,7 @@ export default function EstudioEJogos() {
   const {
     jogos,
     setJogos,
-    // idDoJogoClicado, setIdDoJogoClicado
   } = useJogosContext();
-  // const [idDoJogoClicado, setIdDoJogoClicado] = useState(undefined);
 
   useEffect(() => {
     api.get("/Jogos").then((response) => setJogos(response.data));
@@ -44,7 +42,6 @@ export default function EstudioEJogos() {
 
   const handleEditEstudio = async (e, estudioToEdit) => {
     e.preventDefault();
-    console.log({ estudioToEdit });
 
     navigate(`/estudio/${estudioToEdit.id}`);
     setIdDoEstudioClicado(undefined);
@@ -64,7 +61,6 @@ export default function EstudioEJogos() {
 
   const handleEditJogo = async (e, jogoToEdit) => {
     e.preventDefault();
-    console.log({ jogoToEdit });
 
     navigate(`/jogo/${jogoToEdit.id}`);
   };
