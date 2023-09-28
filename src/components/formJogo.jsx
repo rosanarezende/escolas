@@ -10,7 +10,7 @@ import { useJogosContext } from "../contexts/jogosContext";
 export default function FormJogo() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { estudios, setIdDoEstudioClicado } = useEstudiosContext();
+  const { estudios, setIdDoEstudioClicado, setEstudios } = useEstudiosContext();
   const { jogos, setJogos } = useJogosContext();
   const [jogo, setJogo] = useState({});
   console.log({ jogo });
@@ -27,6 +27,12 @@ export default function FormJogo() {
         });
     }
   }, [id, setJogo]);
+
+  useEffect(() => {
+    api.get("/Estudios").then((response) => setEstudios(response.data));
+
+    return () => setEstudios([]);
+  }, []);
 
   const handleAddJogo = async (e) => {
     e.preventDefault();

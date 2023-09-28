@@ -1,17 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { api } from "../service/api";
+import { createContext, useContext, useState } from "react";
 
 const EstudiosContext = createContext();
 
 const EstudiosProvider = ({ children }) => {
   const [idDoEstudioClicado, setIdDoEstudioClicado] = useState(undefined);
   const [estudios, setEstudios] = useState([]);
-
-  useEffect(() => {
-    api.get("/Estudios").then((response) => setEstudios(response.data));
-
-    return () => setEstudios([]);
-  }, []);
 
   return (
     <EstudiosContext.Provider

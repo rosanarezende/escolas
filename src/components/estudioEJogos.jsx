@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +22,12 @@ export default function EstudioEJogos() {
     api.get("/Jogos").then((response) => setJogos(response.data));
 
     return () => setJogos([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    api.get("/Estudios").then((response) => setEstudios(response.data));
+
+    return () => setEstudios([]);
   }, []);
 
   const handleDeleteEstudio = async (e, estudioId) => {
@@ -80,26 +86,60 @@ export default function EstudioEJogos() {
 
       {estudios.map((estudio, index) => (
         <React.Fragment key={`${estudio.id}-${index}`}>
-          <h3>
-            {estudio.nome}
-            <button
-              onClick={() => {
-                if (idDoEstudioClicado === estudio.id) {
-                  setIdDoEstudioClicado("");
-                } else {
-                  setIdDoEstudioClicado(estudio.id);
+          <div
+            style={{
+              width: "100%",
+              minWidth: 600,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h3>{estudio.nome}</h3>
+            {jogos.some((jogo) => jogo.estudioId === estudio.id) && (
+              <button
+                style={
+                  idDoEstudioClicado === estudio.id
+                    ? { backgroundColor: "red", color: "white" }
+                    : { backgroundColor: "green", color: "white" }
                 }
-              }}
-            >
-              {idDoEstudioClicado === estudio.id ? "Fechar" : "Ver jogos"}
-            </button>
-            <button onClick={(e) => handleEditEstudio(e, estudio)}>
-              Editar
-            </button>
-            <button onClick={(e) => handleDeleteEstudio(e, estudio.id)}>
-              Excluir
-            </button>
-          </h3>
+                onClick={() => {
+                  if (idDoEstudioClicado === estudio.id) {
+                    setIdDoEstudioClicado("");
+                  } else {
+                    setIdDoEstudioClicado(estudio.id);
+                  }
+                }}
+              >
+                {idDoEstudioClicado === estudio.id ? (
+                  "Fechar"
+                ) : (
+                  <>
+                    Ver jogos
+                    <span style={{ marginLeft: 10 }}>
+                      (
+                      {
+                        jogos.filter((jogo) => jogo.estudioId === estudio.id)
+                          .length
+                      }
+                      )
+                    </span>
+                  </>
+                )}
+              </button>
+            )}
+            <div>
+              <button
+                onClick={(e) => handleEditEstudio(e, estudio)}
+                style={{ marginRight: 10 }}
+              >
+                Editar
+              </button>
+              <button onClick={(e) => handleDeleteEstudio(e, estudio.id)}>
+                Excluir
+              </button>
+            </div>
+          </div>
 
           {idDoEstudioClicado === estudio.id && (
             <table>

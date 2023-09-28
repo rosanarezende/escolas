@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { api } from "../service/api";
-
 
 export default function FormEstudio() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [estudio, setEstudio] = useState({});
+
+  useEffect(() => {
+    if (id) {
+      api
+        .get(`/Estudios/${id}`)
+        .then((response) => {
+          setEstudio(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [id]);
 
   const handleAddEstudio = async (e) => {
     e.preventDefault();
@@ -59,7 +71,6 @@ export default function FormEstudio() {
         <br />
         <br />
 
-
         <label htmlFor="dataCriacao">Data de lançamento</label>
         <br />
         <input
@@ -69,7 +80,7 @@ export default function FormEstudio() {
             const data = new Date(e.target.value).toISOString();
             setEstudio({ ...estudio, dataCriacao: data });
           }}
-          />
+        />
         <br />
         <br />
 
