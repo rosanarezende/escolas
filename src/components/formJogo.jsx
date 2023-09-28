@@ -5,11 +5,13 @@ import { v4 as uuid } from "uuid";
 import { useEstudiosContext } from "../contexts/estudiosContext";
 import { api } from "../service/api";
 import { CATEGORIAS } from "../constants";
+import { useJogosContext } from "../contexts/jogosContext";
 
 export default function FormJogo() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { estudios } = useEstudiosContext();
+  const { estudios, setIdDoEstudioClicado } = useEstudiosContext();
+  const { jogos, setJogos } = useJogosContext();
   const [jogo, setJogo] = useState({});
   console.log({ jogo });
 
@@ -45,14 +47,19 @@ export default function FormJogo() {
 
   const handleEditJogo = async (e) => {
     e.preventDefault();
-    console.log({ jogo });
 
+    const data = {
+      ...jogo,
+      categoria: Number(jogo.categoria),
+    };
+
+    setIdDoEstudioClicado(undefined);
     try {
-      await api.put(`/Jogos/${id}`, jogo);
+      await api.put(`/Jogos/${id}`, data);
+      setJogos(jogos.map((j) => (j.id === id ? data : j)));
       navigate("/");
     } catch (error) {
       console.error(error);
-      alert("Erro ao editar jogo");
     }
   };
 

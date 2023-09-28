@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useEstudiosContext } from "../contexts/estudiosContext";
@@ -17,6 +17,13 @@ export default function EstudioEJogos() {
   } = useJogosContext();
   // const [idDoJogoClicado, setIdDoJogoClicado] = useState(undefined);
 
+  useEffect(() => {
+    api.get("/Jogos").then((response) => setJogos(response.data));
+
+    return () => setJogos([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleDeleteEstudio = async (e, estudioId) => {
     e.preventDefault();
 
@@ -34,6 +41,7 @@ export default function EstudioEJogos() {
     console.log({ estudioToEdit });
 
     navigate(`/estudio/${estudioToEdit.id}`);
+    setIdDoEstudioClicado(undefined);
   };
 
   const handleDeleteJogo = async (e, jogoId) => {
@@ -57,6 +65,17 @@ export default function EstudioEJogos() {
 
   return (
     <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 40,
+        }}
+      >
+        <button onClick={() => navigate("/estudio")}>Adicionar estúdio</button>
+        <button onClick={() => navigate("/jogo")}>Adicionar jogo</button>
+      </div>
+
       <h2>Estúdios e jogos</h2>
 
       {estudios.map((estudio, index) => (
@@ -100,14 +119,22 @@ export default function EstudioEJogos() {
                   .map((jogo, index) => (
                     <tr key={`${jogo.id}-${index}`} className="jogo">
                       <td>{jogo.nome}</td>
-                      <td>{jogo.dataLancamento}</td>
                       <td>
-                        {CATEGORIAS.find(
-                          (categoria) => categoria.id === jogo.categoria
-                        ).nome}
+                        {jogo.dataLancamento
+                          .split("T")[0]
+                          .split("-")
+                          .reverse()
+                          .join("/")}
+                      </td>
+                      <td>
+                        {
+                          CATEGORIAS.find(
+                            (categoria) => categoria.id === jogo.categoria
+                          ).nome
+                        }
                       </td>
                       <td onClick={(e) => handleEditJogo(e, jogo)}>Editar</td>
-                      <td onClick={(e) => handleDeleteJogo(e, jogo)}>
+                      <td onClick={(e) => handleDeleteJogo(e, jogo.id)}>
                         Excluir
                       </td>
                     </tr>
