@@ -13,7 +13,6 @@ export default function FormJogo() {
   const { estudios, setIdDoEstudioClicado, setEstudios } = useEstudiosContext();
   const { jogos, setJogos } = useJogosContext();
   const [jogo, setJogo] = useState({});
-  console.log({ jogo });
 
   useEffect(() => {
     if (id) {

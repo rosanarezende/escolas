@@ -3,15 +3,11 @@ import { createContext, useContext, useState } from 'react';
 const JogosContext = createContext();
 
 const JogosProvider = ({ children }) => {
-  // const [idDoJogoClicado, setIdDoJogoClicado] = useState(undefined);
   const [jogos, setJogos] = useState([]);
 
   return (
     <JogosContext.Provider
       value={{
-        // idDoJogoClicado,
-        // setIdDoJogoClicado,
-        // 
         jogos,
         setJogos,
       }}
